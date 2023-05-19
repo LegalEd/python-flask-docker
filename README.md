@@ -28,4 +28,11 @@ $ docker inspect -f '{{ .Config.Hostname }}' my-container
 982aa7321adc
 ```
 
-
+### Bonus 
+Can you find the secret hidden in the docker container?
+```
+/app # ls
+Dockerfile        LICENSE           README.md         poetry.lock       pyproject.toml    requirements.txt  secret            seed              src
+/app # cat secret 
+<super secret password here>
+```

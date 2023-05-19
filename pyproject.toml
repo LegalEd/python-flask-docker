@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "python-flask-docker"
+version = "0.1.0"
+description = ""
+authors = ["Christopher Elias <zazhin@gmail.com>"]
+readme = "README.md"
+packages = [{include = "python_flask_docker"}]
+
+[tool.poetry.dependencies]
+python = "3.11"
+flask = "2.3.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
