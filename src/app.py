@@ -1,17 +1,18 @@
-from flask import Flask,render_template
-import socket
+
+from flask import Flask, render_template
+from flask_sock import Sock
 
 app = Flask(__name__)
+sock = Sock(app)
 
-@app.route("/")
+
+@app.route('/')
 def index():
-    try:
-        host_name = socket.gethostname()
-        host_ip = socket.gethostbyname(host_name)
-        return render_template('index.html', hostname=host_name, ip=host_ip)
-    except:
-        return render_template('error.html')
+    return render_template('index.html')
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+@sock.route('/echo')
+def echo(sock):
+    while True:
+        data = sock.receive()
+        sock.send(data)
