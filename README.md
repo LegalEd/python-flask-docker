@@ -1,3 +1,5 @@
+# WARNING!!! THIS REPO IS FOR TRAINING PURPOSES. IT HAS INTENTIONAL BUGS/VULNERABILITIES. DO NOT DEPLOY IN A PRODUCTION ENVIRONMENT!!!
+
 # python-flask-docker
 Basic Python Flask app in Docker which prints the hostname and IP of the container
 
