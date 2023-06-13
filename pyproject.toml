@@ -9,6 +9,12 @@ packages = [{include = "python_flask_docker"}]
 [tool.poetry.dependencies]
 python = "3.11"
 flask = "2.3.2"
+websockets = "^11.0.3"
+websocket = "^0.2.1"
+flask-socketio = "^5.3.4"
+eventlet = "^0.33.3"
+gunicorn = "^20.1.0"
+flask-sock = "^0.6.0"
 
 
 [build-system]
