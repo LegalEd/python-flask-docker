@@ -1,6 +1,12 @@
 <!doctype html>
 <html>
 
+<style>
+    .clicked {
+      outline: 1px solid rgb(255, 0, 0);
+    }
+</style> 
+
 <head>
     <title>Flask-Sock Demo</title>
 </head>
@@ -32,4 +38,24 @@
     </script>
 </body>
 
+<head>
+    <title>Random Joke</title>
+</head>
+<body>
+    <br></br> 
+    <button onclick="getRandomJoke()" 
+        onmousedown="this.classList.add('clicked')" 
+        onmouseup="this.classList.remove('clicked')"
+        style="font-family: 'EB Garamond', serif; background-color: rgb(255, 255, 255); border: 1px solid black;">
+        Don't click me!
+    </button>
+    <p id="joke-placeholder"></p>
+    <script>
+        function getRandomJoke() {
+            fetch('/random_joke')
+                .then(response => response.text())
+                .then(joke => document.getElementById('joke-placeholder').innerHTML = joke);
+        }
+    </script>
+</body>
 </html>
