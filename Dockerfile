@@ -1,9 +1,9 @@
-FROM python:3.11-alpine
+FROM python:3.11
 LABEL maintainer="celias@realla.co.uk"
 COPY . /app
 WORKDIR /app
-RUN apk add pwgen && pwgen -H seed > secret
+
 RUN pip install -r requirements.txt
 EXPOSE 8080
-ENTRYPOINT ["python"]
-CMD ["src/app.py"]
+WORKDIR /app/src
+ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0"]
