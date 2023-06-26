@@ -22,7 +22,8 @@ def echo(sock):
 
 @app.route("/random_joke")
 def random_joke():
-    with open("src/jokes.csv", "r") as file:
+
+    with open("/app/src/jokes.csv", "r") as file:
         reader = csv.reader(file)
         jokes = list(reader)
         random_joke = random.choice(jokes)[0]
