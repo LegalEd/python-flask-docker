@@ -5,6 +5,20 @@
     .clicked {
         outline: 1px solid rgb(255, 0, 0);
     }
+
+    body {
+        background-image: url("static/nostradamus.png");
+        background-color: #aaaaaa;
+    }
+
+    .interactive {
+        background-color: black;
+        color: white;
+        margin: auto;
+        width: 50%;
+        position: absolute;
+        border: 5px solid;
+    }
 </style>
 
 <head>
@@ -12,51 +26,48 @@
 </head>
 
 <body>
-    <h1>Flask-Sock Demo</h1>
-    <div id="log"></div>
-    <br>
-    <form id="form">
-        <label for="text">Input: </label>
-        <input type="text" id="text" autofocus>
-    </form>
-    <script>
-        const log = (text, color) => {
-            document.getElementById('log').innerHTML += `<span style="color: ${color}">${text}</span><br>`;
-        };
+    <div class="interactive">
+        <h1>Flask-Sock Demo</h1>
+        <div id="log"></div>
+        <br>
+        <form id="form">
+            <label for="text">Input: </label>
+            <input type="text" id="text" autofocus>
+        </form>
+        <script>
+            const log = (text, color) => {
+                document.getElementById('log').innerHTML += `<span style="color: ${color}">${text}</span><br>`;
+            };
 
-        const socket = new WebSocket('ws://' + location.host + '/echo');
-        socket.addEventListener('message', ev => {
-            log('<<< ' + ev.data, 'blue');
-        });
-        document.getElementById('form').onsubmit = ev => {
-            ev.preventDefault();
-            const textField = document.getElementById('text');
-            log('>>> ' + textField.value, 'red');
-            socket.send(textField.value);
-            textField.value = '';
-        };
-    </script>
-</body>
+            const socket = new WebSocket('ws://' + location.host + '/echo');
+            socket.addEventListener('message', ev => {
+                log('<<< ' + ev.data, 'blue');
+            });
+            document.getElementById('form').onsubmit = ev => {
+                ev.preventDefault();
+                const textField = document.getElementById('text');
+                log('>>> ' + textField.value, 'red');
+                socket.send(textField.value);
+                textField.value = '';
+            };
+        </script>
 
-<head>
-    <title>Random Joke</title>
-</head>
 
-<body>
-    <br></br>
-    <button onclick="getRandomJoke()" onmousedown="this.classList.add('clicked')"
-        onmouseup="this.classList.remove('clicked')"
-        style="font-family: 'EB Garamond', serif; background-color: rgb(255, 255, 255); border: 1px solid black;">
-        Don't click me!
-    </button>
-    <p id="joke-placeholder"></p>
-    <script>
-        function getRandomJoke() {
-            fetch('/random_joke')
-                .then(response => response.text())
-                .then(joke => document.getElementById('joke-placeholder').innerHTML = joke);
-        }
-    </script>
+        <br></br>
+        <button onclick="getRandomJoke()" onmousedown="this.classList.add('clicked')"
+            onmouseup="this.classList.remove('clicked')"
+            style="font-family: 'EB Garamond', serif; background-color: rgb(255, 255, 255); border: 1px solid black;">
+            Don't click me!
+        </button>
+        <p id="joke-placeholder"></p>
+        <script>
+            function getRandomJoke() {
+                fetch('/random_joke')
+                    .then(response => response.text())
+                    .then(joke => document.getElementById('joke-placeholder').innerHTML = joke);
+            }
+        </script>
+    </div>
 </body>
 
 </html>
