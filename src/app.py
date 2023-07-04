@@ -37,15 +37,16 @@ def echo(sock):
 # }
 
 json_schema = {
+    "id": "notsr1",
     "type": "object",
     "properties": {
-        "id": {"type": "string"},
-        "pubkey": {"type": "string"},
-        "created_at": {"type": "number"},
-        "kind": {"type": "number"},
+        "id": {"type": "string", "minLength": 64, "maxLength": 64},
+        "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
+        "created_at": {"type": "number", "minimum": 1000000000, "exclusiveMaximum": 9999999999},
+        "kind": {"type": "array",   "items": {"type": "number"}},
         "tags": {"type": "array"},
-        "content": {"type": "string"},
-        "sig": {"type": "string"},
+        "content": {"type": "string", "maxLength": 256},
+        "sig": {"type": "string", "minLength": 64, "maxLength": 64},
     }
 }
 
