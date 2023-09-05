@@ -23,8 +23,18 @@ def echo(sock):
         sock.send(data)
 
 
+# AP - convert Dockerfile to docker-compose.yml
+
+
+# spot the XSS <image src=1 href=1 onerror="javascript:alert('This is an XSS vulnerability')"></image>
+# <p><script>alert('This is an XSS vulnerability');</script></p>
+# Const name = "<img src='x' onerror='alert(1)'>";
+# https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML
+# https://security.stackexchange.com/questions/127711/under-which-conditions-wouldnt-a-script-tag-run
+
 # {
 #   "id": <32-bytes lowercase hex-encoded sha256 of the serialized event data>,
+# a2 ea 4c 87 e8 3e ab 70 ed c4 f3 9c 2e 70 77 38 9c 3d d0 10 c2 0c ad fb 9c 58 d7 27 8c c3 de ec
 #   "pubkey": <32-bytes lowercase hex-encoded public key of the event creator>,
 #   "created_at": <unix timestamp in seconds>,
 #   "kind": <integer>,
@@ -44,13 +54,16 @@ json_schema = {
         "id": {"type": "string", "minLength": 64, "maxLength": 64},
         "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
         "created_at": {"type": "number", "minimum": 1000000000, "exclusiveMaximum": 9999999999},
-        "kind": {"type": "array",   "items": {"type": "number"}},
+        "kind": {"type": "number", "exclusiveMaximum": 4},
         "tags": {"type": "array"},
         "content": {"type": "string", "maxLength": 256},
-        "sig": {"type": "string", "minLength": 64, "maxLength": 64},
+        "sig": {"type": "string", "minLength": 95, "maxLength": 95},
     },
     "required": ["id", "pubkey", "created_at", "kind"]
 }
+
+received_messages = []
+sent_messages = []
 
 
 @sock.route("/nostr")
@@ -61,11 +74,36 @@ def nostr(sock):
             json_data = json.loads(data)
             # raise error if invalid
             validate(instance=json_data, schema=json_schema)
-            sock.send(json_data)
+            # valid_json = json.dumps(json_data, separators=(",", ":"))
+            valid_json = json_data
+            current_app.logger.info(f"received {valid_json}")
+            if valid_json["kind"] == 1:  # saving messages
+                received_messages.append(valid_json)
+                current_app.logger.info(f"Saving: {valid_json}")
+                sock.send("Saving message")
+                # sock.close()
+
+            elif valid_json["kind"] == 2:  # sending messages
+                for message in received_messages:
+                    messagehash = message["id"] + valid_json["pubkey"]
+                    current_app.logger.info(f"message hash is : {messagehash}")
+                    if message["pubkey"] == valid_json["pubkey"]:
+                        continue
+                    elif messagehash not in sent_messages:
+                        sent_messages.append(messagehash)
+                        current_app.logger.info(f"Sent: {message}")
+                        sock.send(message)
+                # sock.close()
+
+            else:
+                sock.send("Please specify kind")
+                # sock.close()
 
         except Exception as e:
             sock.send(f"error {e}")
             current_app.logger.info(f"error: {e}")
+            # sock.close()
+
 
 
 @app.route("/random_joke")

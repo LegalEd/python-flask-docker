@@ -1,0 +1,9 @@
+{
+    "id": "tomccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "pubkey": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "created_at": 1234567890,
+    "kind": 1,
+    "tags": [],
+    "content": "This is the third message",
+    "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
