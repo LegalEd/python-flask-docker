@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<style>
+    .clicked {
+        outline: 1px solid rgb(255, 0, 0);
+    }
+
+    body {
+        background-image: url("static/nostradamus.png");
+        background-color: #aaaaaa;
+    }
+
+    h1 {
+        color: #0390fc;
+    }
+
+    .interactive {
+        background-color: black;
+        color: white;
+        margin: auto;
+        width: 50%;
+        position: absolute;
+        border: 5px solid;
+    }
+</style>
+
+<head>
+    <title>NoOSTRadamus</title>
+</head>
+
+<body>
+    <div class="interactive">
+        <h1>Frontend</h1>
+        <div id="log"></div>
+        <br>
+        <form id="form">
+            <label for="text">ID: </label>
+            <input type="text" id="messageID" autofocus>
+            <label for="text">Input: </label>
+            <input type="text" id="text" autofocus>
+            <input type="submit" value="Send">
+        </form>
+
+        <script src="{{ url_for('static', filename='nostr.js') }}"></script>
+
+        <script>
+
+
+
+
+
+        </script>
+
+
+        <br></br>
+        <button onclick="getRandomJoke()" onmousedown="this.classList.add('clicked')"
+            onmouseup="this.classList.remove('clicked')"
+            style="font-family: 'EB Garamond', serif; background-color: rgb(255, 255, 255); border: 1px solid black;">
+            Don't click me!
+        </button>
+        <p id="joke-placeholder"></p>
+        <script>
+            function getRandomJoke() {
+                fetch('/random_joke')
+                    .then(response => response.text())
+                    .then(joke => document.getElementById('joke-placeholder').innerHTML = joke);
+            }
+        </script>
+    </div>
+</body>
+
+</html>

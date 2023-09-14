@@ -21,6 +21,7 @@ def echo(sock):
     while True:
         data = sock.receive()
         sock.send(data)
+        sock.send("frontend")
 
 
 # AP - convert Dockerfile to docker-compose.yml
