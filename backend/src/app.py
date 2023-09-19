@@ -72,6 +72,7 @@ def nostr(sock):
     while True:
         data = sock.receive()
         try:
+            current_app.logger.info(f"received messages are: {received_messages}")
             json_data = json.loads(data)
             # raise error if invalid
             # validate(instance=json_data, schema=json_schema)
