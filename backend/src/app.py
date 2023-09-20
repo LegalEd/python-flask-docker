@@ -15,10 +15,6 @@ sock = Sock(app)
 def index():
     return render_template("index.html")
 
-
-# AP - convert Dockerfile to docker-compose.yml
-
-
 # spot the XSS <image src=1 href=1 onerror="javascript:alert('This is an XSS vulnerability')"></image>
 # <p><script>alert('This is an XSS vulnerability');</script></p>
 # Const name = "<img src='x' onerror='alert(1)'>";
@@ -44,7 +40,7 @@ json_schema = {
     "id": "notsr1",
     "type": "object",
     "properties": {
-        "id": {"type": "string", "minLength": 64, "maxLength": 64},
+        "id": {"type": "string", "minLength": 32, "maxLength": 64},
         "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
         "created_at": {"type": "number", "minimum": 1000000000, "exclusiveMaximum": 9999999999},
         "kind": {"type": "number", "exclusiveMaximum": 4},
