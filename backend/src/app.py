@@ -41,7 +41,7 @@ json_schema = {
     "type": "object",
     "properties": {
         "id": {"type": "string", "minLength": 32, "maxLength": 64},
-        "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
+        # "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
         "created_at": {"type": "number", "minimum": 1000000000, "exclusiveMaximum": 9999999999},
         "kind": {"type": "number", "exclusiveMaximum": 4},
         "tags": {"type": "array"},
