@@ -16,14 +16,6 @@ def index():
     return render_template("index.html")
 
 
-@sock.route("/echo")
-def echo(sock):
-    while True:
-        data = sock.receive()
-        sock.send(data)
-        sock.send("backend")
-
-
 # AP - convert Dockerfile to docker-compose.yml
 
 
@@ -75,15 +67,15 @@ def nostr(sock):
             current_app.logger.info(f"received messages are: {received_messages}")
             json_data = json.loads(data)
             # raise error if invalid
-            # validate(instance=json_data, schema=json_schema)
-            # valid_json = json.dumps(json_data, separators=(",", ":"))
+            validate(instance=json_data, schema=json_schema)
+            valid_json = json.dumps(json_data, separators=(",", ":"))
             valid_json = json_data
             current_app.logger.info(f"received {valid_json}")
             if valid_json["kind"] == 1:  # saving messages
                 received_messages.append(valid_json)
                 current_app.logger.info(f"Saving: {valid_json}")
-                # sock.send({"content": "Saving message"})
-                # sock.close()
+                sock.send({"content": "Saving message"})
+                sock.close()
 
             elif valid_json["kind"] == 2:  # sending messages
                 for message in received_messages:
@@ -99,25 +91,14 @@ def nostr(sock):
                 # sock.close()
 
             else:
-                # sock.send({"content": "Saving message"})
-                # sock.close()
+                sock.send({"content": "Saving message"})
+                sock.close()
                 continue
 
         except Exception as e:
             sock.send({"content": f"error {e}"})
             current_app.logger.info(f"error: {e}")
             # sock.close()
-
-
-
-@app.route("/random_joke")
-def random_joke():
-
-    with open("/app/src/jokes.csv", "r") as file:
-        reader = csv.reader(file)
-        jokes = list(reader)
-        random_joke = random.choice(jokes)[0]
-    return random_joke
 
 
 if __name__ == '__main__':

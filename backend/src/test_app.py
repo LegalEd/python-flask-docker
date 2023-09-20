@@ -4,11 +4,13 @@ import websockets
 
 @pytest.mark.asyncio
 async def test_websocket():
+    # breakpoint()
     async with websockets.connect('ws://localhost:8080/nostr') as websocket:
         data = 'hi'
         await websocket.send(data)
         res = await websocket.recv()
-        assert res == "error Expecting value: line 1 column 1 (char 0)"
+        assert res == "{'content': 'error Expecting value: line 1 column 1 (char 0)'}"
+
 
 
 @pytest.mark.asyncio
@@ -17,7 +19,7 @@ async def test_websocket_json():
         data = '{}'
         await websocket.send(data)
         res = await websocket.recv()
-        assert res.startswith("error 'id' is a required property")
+        assert res.startswith('{\'content\': "error \'id\' is a required property')
 
 
 @pytest.mark.asyncio
@@ -31,7 +33,7 @@ async def test_websocket_real():
                     "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}"""
         await websocket.send(data)
         res = await websocket.recv()
-        assert res == "Saving message"
+        assert res == "{'content': 'Saving message'}"
 
 
 @pytest.mark.asyncio
@@ -45,7 +47,7 @@ async def test_websocket_ban():
             "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}"""
         await websocket.send(data2)
         res2 = await websocket.recv()
-        assert res2 == "Saving message"
+        assert res2 == "{'content': 'Saving message'}"
 
 
 @pytest.mark.asyncio
@@ -59,6 +61,6 @@ async def test_websocket_tom():
             "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}"""
         await websocket.send(data3)
         res3 = await websocket.recv()
-        assert res3 == "{'id': 'alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'pubkey': 'alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'created_at': 1234567890, 'kind': 1, 'tags': [], 'content': 'This is the first message', 'sig': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'}"
+        assert res3 == '{"id": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "pubkey": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "created_at": 1234567890, "kind": 1, "tags": [], "content": "This is the first message", "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}'
         res4 = await websocket.recv()
-        assert res4 == "{'id': 'banaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', 'pubkey': 'banaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', 'created_at': 1234567890, 'kind': 1, 'tags': [], 'content': 'This is the second message', 'sig': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'}"
+        assert res4 == '{"id": "banaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1", "pubkey": "banaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1", "created_at": 1234567890, "kind": 1, "tags": [], "content": "This is the second message", "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}'
