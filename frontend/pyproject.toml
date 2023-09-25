@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "python-flask-docker"
+version = "0.1.0"
+description = ""
+authors = ["Christopher Elias <zazhin@gmail.com>"]
+readme = "README.md"
+packages = [{include = "python_flask_docker"}]
+
+[tool.poetry.dependencies]
+python = "3.11"
+flask = "2.3.2"
+websockets = "^11.0.3"
+websocket = "^0.2.1"
+flask-socketio = "^5.3.4"
+eventlet = "^0.33.3"
+gunicorn = "^20.1.0"
+flask-sock = "^0.6.0"
+jsonschema = "^4.17.3"
+flake8 = "^6.0.0"
+ecdsa = "^0.18.0"
+pytest = "^7.4.0"
+mock = "^5.1.0"
+pytest-asyncio = "^0.21.1"
+flask-login = "^0.6.2"
+flask-sqlalchemy = "^3.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
