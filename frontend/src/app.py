@@ -82,7 +82,7 @@ def nostr(sock):
                 received_messages.append(valid_json)
                 current_app.logger.info(f"Saving: {valid_json}")
                 sock.send("Saving message")
-                # sock.close()
+                sock.close()
 
             elif valid_json["kind"] == 2:  # sending messages
                 for message in received_messages:
@@ -94,16 +94,16 @@ def nostr(sock):
                         sent_messages.append(messagehash)
                         current_app.logger.info(f"Sent: {message}")
                         sock.send(message)
-                # sock.close()
+                sock.close()
 
             else:
                 sock.send("Please specify kind")
-                # sock.close()
+                sock.close()
 
         except Exception as e:
             sock.send(f"error {e}")
             current_app.logger.info(f"error: {e}")
-            # sock.close()
+            sock.close()
 
 
 

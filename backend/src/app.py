@@ -40,7 +40,7 @@ json_schema = {
     "id": "notsr1",
     "type": "object",
     "properties": {
-        "id": {"type": "string", "minLength": 32, "maxLength": 64},
+        "id": {"type": "string", "minLength": 64, "maxLength": 64},
         # "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
         "created_at": {"type": "number", "minimum": 1000000000, "exclusiveMaximum": 9999999999},
         "kind": {"type": "number", "exclusiveMaximum": 4},
@@ -71,24 +71,20 @@ def nostr(sock):
                 received_messages.append(valid_json)
                 current_app.logger.info(f"Saving: {valid_json}")
                 sock.send({"content": "Saving message"})
-                sock.close()
 
             elif valid_json["kind"] == 2:  # sending messages
                 for message in received_messages:
                     messagehash = message["id"] + valid_json["pubkey"]
                     current_app.logger.info(f"message hash is : {messagehash}")
                     if message["pubkey"] == valid_json["pubkey"]:
-                        # sock.send("no new messages")
                         continue
                     elif messagehash not in sent_messages:
                         sent_messages.append(messagehash)
                         current_app.logger.info(f"Sent: {message}")
                         sock.send(json.dumps(message))
-                # sock.close()
 
             else:
                 sock.send({"content": "Saving message"})
-                sock.close()
                 continue
 
         except Exception as e:
