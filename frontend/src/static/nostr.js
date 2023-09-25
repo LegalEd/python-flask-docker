@@ -14,6 +14,7 @@ time = JSON.stringify(time);
 
 var data = {"id": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
             "pubkey": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "username": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "created_at": 1234567890,
             "kind": 1,
             "tags": [],
@@ -32,7 +33,9 @@ const socket = new WebSocket('ws://' + host + '/nostr');
 document.getElementById('form').onsubmit = ev => {
     ev.preventDefault();
     const textField = document.getElementById('text');
+    const user = document.getElementById('messageID');
     data.content = textField.value;
+    data.username = user.value;
     hash = CryptoJS.MD5(data.content).toString()
     data.pubkey = time;
     console.log(hash);
@@ -42,7 +45,7 @@ document.getElementById('form').onsubmit = ev => {
 
 
 
-    log('>>> ' + data.id + ':' + data.content,"#DE9151" );
+    log('>>> ' + user.value + ':' + data.content,"#2E2E3A" );
     
     // send data
     socket.send(JSON.stringify(data));
@@ -56,7 +59,7 @@ document.getElementById('form').onsubmit = ev => {
 const socket2 = new WebSocket('ws://' + host + '/nostr');
 socket2.addEventListener('message', ev => {
 var receivedMessage = JSON.parse(ev.data);
-log('<<< ' + receivedMessage.id + ':' + receivedMessage.content, "#BC5D2E");
+log('<<< ' + receivedMessage.username + ':' + receivedMessage.content, "#F34213");
 
 console.log(typeof ev);
 ev = '';
