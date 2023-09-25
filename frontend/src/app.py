@@ -10,6 +10,13 @@ from flask_sock import Sock
 app = Flask(__name__)
 sock = Sock(app)
 
+from . import db
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
 
 @app.route("/")
 def index():
@@ -45,6 +52,7 @@ json_schema = {
     "type": "object",
     "properties": {
         "id": {"type": "string", "minLength": 64, "maxLength": 64},
+        "username": {"type": "string", "minLength": 1, "maxLength": 64},
         "pubkey": {"type": "string", "minLength": 64, "maxLength": 64},
         "created_at": {"type": "number", "minimum": 1000000000, "exclusiveMaximum": 9999999999},
         "kind": {"type": "number", "exclusiveMaximum": 4},
@@ -97,7 +105,19 @@ def nostr(sock):
             current_app.logger.info(f"error: {e}")
             sock.close()
 
+@app.route('/login')
+def login():
+    return render_template("login.html")
 
+
+@app.route('/signup')
+def signup():
+    return render_template("signup.html")
+
+
+@app.route('/logout')
+def logout():
+    return "logout"
 
 @app.route("/random_joke")
 def random_joke():
