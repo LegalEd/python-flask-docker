@@ -42,7 +42,7 @@ document.getElementById('form').onsubmit = ev => {
 
 
 
-    log('>>> ' + data.id + ':' + data.content, 'red');
+    log('>>> ' + data.id + ':' + data.content,"#DE9151" );
     
     // send data
     socket.send(JSON.stringify(data));
@@ -56,7 +56,7 @@ document.getElementById('form').onsubmit = ev => {
 const socket2 = new WebSocket('ws://' + host + '/nostr');
 socket2.addEventListener('message', ev => {
 var receivedMessage = JSON.parse(ev.data);
-log('<<< ' + receivedMessage.id + ':' + receivedMessage.content, 'blue');
+log('<<< ' + receivedMessage.id + ':' + receivedMessage.content, "#BC5D2E");
 
 console.log(typeof ev);
 ev = '';
