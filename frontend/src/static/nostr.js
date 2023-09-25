@@ -6,6 +6,11 @@ const log = (text, color) => {
     document.getElementById('log').innerHTML += `<span style="color: ${color}">${text}</span><br>`;
 };
 
+const d = new Date();
+let time = d.getTime();
+time = JSON.stringify(time);
+
+
 
 var data = {"id": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
             "pubkey": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -27,14 +32,12 @@ const socket = new WebSocket('ws://' + host + '/nostr');
 document.getElementById('form').onsubmit = ev => {
     ev.preventDefault();
     const textField = document.getElementById('text');
-    const messageID = document.getElementById('messageID');
     data.content = textField.value;
-    data.pubkey = messageID.value;
     hash = CryptoJS.MD5(data.content).toString()
-
+    data.pubkey = time;
     console.log(hash);
 
-    data.id = hash;
+    data.id = hash + hash;
 
 
 
@@ -64,16 +67,23 @@ setInterval(function(){
     // get data
 
 
-    var getData = {"id": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
-            "pubkey": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "created_at": 1234567890,
-            "kind": 2,
-            "tags": [],
-            "content": "",
-            "sig": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"};
-    getData.pubkey = messageID.value;
-    socket2.send(JSON.stringify(getData))
+    var getData = {
+        "id": "banbanbanbanbanbanbanbanbanbanbanbanbanbanbanbanbanbanbanbanbanb", 
+        "pubkey": "alanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
+        "created_at": 1234567890, 
+        "kind": 2, 
+        "tags": [], 
+        "content": "", 
+        "sig": "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"};
+
+
+    getData.pubkey = time;
+    console.log(getData);
+    payload = JSON.stringify(getData);
     console.log("polling website");
+    console.log(payload)
+    socket2.send(payload)
+    
 
 
 
