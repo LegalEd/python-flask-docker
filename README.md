@@ -11,11 +11,14 @@ $ docker build -t python-flask-docker .
 ```
 
 ### Run the container
-Create a container from the image.
+Navigate to the project directory
 ```
-$ docker run --name my-container -d -p 8080:8080 python-flask-docker
+$ cd python-flask-docker
 ```
-
+Create both containers by using `docker-compose`, build and run each `dockerfile` found in the frontend and backend
+```
+$ docker compose up --build -d
+```
 Now visit http://localhost:8080
 ```
  The hostname of the container is 982aa7321adc and its IP is 172.17.0.2. 
