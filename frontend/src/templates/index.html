@@ -38,7 +38,7 @@
             var spinner = document.getElementById('spinner');
             var form = document.getElementById('form');
 
-            // Show spinner when log.textContent is none
+            // Show spinner and hide form when log is none
             function checkLogContent() {
                 if (!log.textContent.trim()) {
                     spinner.style.display = 'block';
@@ -50,7 +50,7 @@
             }
             setInterval(checkLogContent, 1000);
 
-            // Add invisible content to the log after 10 seconds if it's still empty
+            // After 10 seconds, remove spinner and show form, even if log is still none
             function addInvisibleContent() {
                 if (!log.textContent.trim()) {
                     log.innerHTML = '&#8203;';
