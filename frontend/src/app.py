@@ -119,15 +119,6 @@ def signup():
 def logout():
     return "logout"
 
-@app.route("/random_joke")
-def random_joke():
-
-    with open("/app/src/jokes.csv", "r") as file:
-        reader = csv.reader(file)
-        jokes = list(reader)
-        random_joke = random.choice(jokes)[0]
-    return random_joke
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

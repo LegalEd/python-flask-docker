@@ -1,17 +1,84 @@
 <!DOCTYPE html>
 <html>
+<style>
+    .title {
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    * {
+        font-family: Garamond;
+    }
+
+    #MainPage {
+        color: #fff;
+        background-color: #000;
+    }
+
+    #SendButton,
+    #ClearButton {
+        font-family: Garamond;
+        transform: translateY(-2px);
+        height: 22px;
+    }
+
+    #log {
+        height: 200px;
+        overflow-y: auto;
+        width: 100%;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 6px;
+    }
+    
+    .spinner-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        width: 100px;
+        height: 100px;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner {
+        margin: 10px auto;
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #000000;
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+        position: relative;
+        top: 80px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NoOSTRadamus</title>
+    <title>NOSTRadamus</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
 </head>
 
 <body>
-    <section class="hero is-primary is-fullheight">
-
+    <section id="MainPage" class="hero is-primary is-fullheight">
         <div class="hero-head">
             <nav class="navbar">
                 <div class="container">
@@ -37,7 +104,6 @@
                 </div>
             </nav>
         </div>
-
         <div class="hero-body">
             <div class="container has-text-centered">
                 {% block content %}
