@@ -34,4 +34,4 @@ RUN cd /tmp && \
 
 EXPOSE 8081
 WORKDIR /app/src
-ENTRYPOINT ["/bin/bash", "-c", "python -m flask --app=main run --host=0.0.0.0 --port=8081"]
+ENTRYPOINT ["/bin/bash", "-c", "python -m flask run --host=0.0.0.0 --port=8081"]
