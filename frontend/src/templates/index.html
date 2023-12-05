@@ -33,16 +33,34 @@
     <script src="{{ url_for('static', filename='nostr.js') }}"></script>
     <script src="{{ url_for('static', filename='crypto.js') }}"></script>
     <script>
-        function checkLogContent() {
+        document.addEventListener('DOMContentLoaded', function () {
             var log = document.getElementById('log');
             var spinner = document.getElementById('spinner');
-            if (!log.textContent.trim()) {
-                spinner.style.display = 'block';
-            } else {
+            var form = document.getElementById('form');
+
+            // Show spinner when log.textContent is none
+            function checkLogContent() {
+                if (!log.textContent.trim()) {
+                    spinner.style.display = 'block';
+                    form.style.display = 'none';
+                } else {
+                    spinner.style.display = 'none';
+                    form.style.display = 'block';
+                }
+            }
+            setInterval(checkLogContent, 1000);
+
+            // Add invisible content to the log after 10 seconds if it's still empty
+            function addInvisibleContent() {
+                if (!log.textContent.trim()) {
+                    log.innerHTML = '&#8203;';
+                }
                 spinner.style.display = 'none';
             }
-        }
-        setInterval(checkLogContent, 1000);
+            setTimeout(addInvisibleContent, 10000);
+        });
     </script>
+
+
 </div>
 {% endblock %}
