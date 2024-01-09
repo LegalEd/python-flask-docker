@@ -1,61 +1,66 @@
 <!doctype html>
 <html>
 
-<style>
-    .clicked {
-        outline: 1px solid rgb(255, 0, 0);
-    }
-
-
-    h1 {
-        color: #0390fc;
-    }
-</style>
-
 <head>
-    <title>NoOSTRadamus</title>
+    <title>NOSTRdamus</title>
 </head>
 
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="title">Chat</h3>
+<link rel="icon" href="{{ url_for('static', filename='favicon_black.png') }}" type="image/x-icon">
+<img src="{{ url_for('static', filename='favicon_white.png') }}" alt="Favicon" style="width: 150px; height: 150px;">
+<h3 class="title">NOSTRdamus</h3>
 
 <div class="interactive">
-    <h1>Frontend</h1>
+    <div id="spinner" style="display: none;">
+        <div class="spinner-container">
+            <div class="spinner"></div>
+        </div>
+    </div>
     <div id="log"></div>
     <br>
     <div class="box">
-        <form id="form">
+        <form id="form" style="display: none;">
             <label for="text">Username: </label>
             <input type="text" id="messageID" autofocus>
             <label for="text">Input: </label>
             <input type="text" id="text" autofocus>
-            <input type="submit" value="Send">
+            <input id="SendButton" type="submit" value="Send">
         </form>
     </div>
 
-
     <script src="{{ url_for('static', filename='nostr.js') }}"></script>
     <script src="{{ url_for('static', filename='crypto.js') }}"></script>
-
-
-
-
-    <br></br>
-    <button onclick="getRandomJoke()" onmousedown="this.classList.add('clicked')"
-        onmouseup="this.classList.remove('clicked')"
-        style="font-family: 'EB Garamond', serif; background-color: rgb(255, 255, 255); border: 1px solid black;">
-        Don't click me!
-    </button>
-    <p id="joke-placeholder"></p>
     <script>
-        function getRandomJoke() {
-            fetch('/random_joke')
-                .then(response => response.text())
-                .then(joke => document.getElementById('joke-placeholder').innerHTML = joke);
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var log = document.getElementById('log');
+            var spinner = document.getElementById('spinner');
+            var form = document.getElementById('form');
+
+            // Show spinner and hide form when log is none
+            function checkLogContent() {
+                if (!log.textContent.trim()) {
+                    spinner.style.display = 'block';
+                    form.style.display = 'none';
+                } else {
+                    spinner.style.display = 'none';
+                    form.style.display = 'block';
+                }
+            }
+            setInterval(checkLogContent, 1000);
+
+            // After 10 seconds, remove spinner and show form, even if log is still none
+            function addInvisibleContent() {
+                if (!log.textContent.trim()) {
+                    log.innerHTML = '&#8203;';
+                }
+                spinner.style.display = 'none';
+            }
+            setTimeout(addInvisibleContent, 10000);
+        });
     </script>
+
 
 </div>
 {% endblock %}

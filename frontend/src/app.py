@@ -1,10 +1,11 @@
 import csv
+import sqlite3
 import random
 from flask import current_app
 import json
 from jsonschema import validate
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sock import Sock
 
 app = Flask(__name__)
@@ -13,9 +14,9 @@ sock = Sock(app)
 from . import db
 
 
-@app.route('/profile')
+@app.route("/profile")
 def profile():
-    return render_template('profile.html')
+    return render_template("profile.html")
 
 
 @app.route("/")
@@ -26,9 +27,9 @@ def index():
 # AP - convert Dockerfile to docker-compose.yml
 
 
-# spot the XSS <image src=1 href=1 onerror="javascript:alert('This is an XSS vulnerability')"></image>
-# <p><script>alert('This is an XSS vulnerability');</script></p>
-# Const name = "<img src='x' onerror='alert(1)'>";
+# spot the XSS <image src=1 href=1 onerror="javascript:alert("This is an XSS vulnerability")"></image>
+# <p><script>alert("This is an XSS vulnerability");</script></p>
+# Const name = "<img src="x" onerror="alert(1)">";
 # https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML
 # https://security.stackexchange.com/questions/127711/under-which-conditions-wouldnt-a-script-tag-run
 
@@ -66,25 +67,27 @@ json_schema = {
 received_messages = []
 sent_messages = []
 
-
 @sock.route("/nostr")
 def nostr(sock):
     while True:
         data = sock.receive()
         try:
             json_data = json.loads(data)
-            # raise error if invalid
             validate(instance=json_data, schema=json_schema)
-            # valid_json = json.dumps(json_data, separators=(",", ":"))
             valid_json = json_data
             current_app.logger.info(f"received {valid_json}")
-            if valid_json["kind"] == 1:  # saving messages
+
+
+
+            # Saving messages:
+            if valid_json["kind"] == 1:
                 received_messages.append(valid_json)
                 current_app.logger.info(f"Saving: {valid_json}")
                 sock.send("Saving message")
                 sock.close()
 
-            elif valid_json["kind"] == 2:  # sending messages
+            # Sending messages:
+            elif valid_json["kind"] == 2:
                 for message in received_messages:
                     messagehash = message["id"] + valid_json["pubkey"]
                     current_app.logger.info(f"message hash is : {messagehash}")
@@ -105,29 +108,48 @@ def nostr(sock):
             current_app.logger.info(f"error: {e}")
             sock.close()
 
-@app.route('/login')
+@app.route("/login")
 def login():
     return render_template("login.html")
 
 
-@app.route('/signup')
+@app.route("/signup")
 def signup():
     return render_template("signup.html")
 
 
-@app.route('/logout')
+@app.route("/logout")
 def logout():
     return "logout"
 
-@app.route("/random_joke")
-def random_joke():
 
-    with open("/app/src/jokes.csv", "r") as file:
-        reader = csv.reader(file)
-        jokes = list(reader)
-        random_joke = random.choice(jokes)[0]
-    return random_joke
+# Ensure messages table exists:
+with sqlite3.connect("messages_database.db") as messages_db_connection:
+    messages_db_cursor = messages_db_connection.cursor()
+    messages_db_cursor.execute("""CREATE TABLE IF NOT EXISTS messages_table (message_id TEXT PRIMARY KEY, username TEXT, timestamp TEXT, message TEXT)""")
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+@app.route("/save_message", methods=["POST"])
+def save_message():
+    """Save timestamp, username and message to messages db."""
+    try:
+        with sqlite3.connect("messages_database.db") as messages_db_connection:
+            messages_db_cursor = messages_db_connection.cursor()
+
+            data = request.get_json()
+            content = data.get("content")
+            timestamp = content.split(")")[0].split("(")[1].strip()
+            username = content.split(")")[1].split(":")[0].strip()
+            message = content.split(")")[1].split(":")[1].strip()
+            message_id = (username + "_"+ timestamp).replace(" ", "_").replace("-", "_").replace(":", "_").lower()
+
+            messages_db_cursor.execute("""INSERT INTO messages_table (message_id, username, timestamp, message) VALUES (?, ?, ?, ?)""", (message_id, username, timestamp, message))
+            messages_db_connection.commit()
+        return {"message": "Message saved successfully"}, 200
+    except Exception as e:
+        print(e)
+        return {"error": str(e)}, 500
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080, debug=True)
